@@ -1,0 +1,17 @@
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Server.exe.config
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Server.exe
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Server.pdb
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\obj\Debug\Server.exe
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\obj\Debug\Server.pdb
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\PESocket.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Protocal.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Protocal.pdb
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\PESocket.pdb
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\obj\Debug\Server.csproj.CopyComplete
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\MySql.Data.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Google.Protobuf.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\BouncyCastle.Crypto.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Ubiety.Dns.Core.dll
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Server\bin\Debug\Renci.SshNet.dll

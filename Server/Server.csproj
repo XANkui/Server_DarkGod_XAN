@@ -38,9 +38,18 @@
     <Compile Include="Common\ServerStart.cs" />
     <Compile Include="DB\DBMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CfgSvc.cs" />
     <Compile Include="Service\NetSvc.cs" />
+    <Compile Include="Service\PETimer.cs" />
     <Compile Include="Service\ServerSession.cs" />
+    <Compile Include="Service\TimerSvc.cs" />
+    <Compile Include="System\BuySys.cs" />
+    <Compile Include="System\ChatSys.cs" />
+    <Compile Include="System\GuideSys.cs" />
     <Compile Include="System\LoginSys.cs" />
+    <Compile Include="System\PowerSys.cs" />
+    <Compile Include="System\StrongSys.cs" />
+    <Compile Include="System\TaskSys.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -55,6 +64,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Protocal\Protocal.csproj">

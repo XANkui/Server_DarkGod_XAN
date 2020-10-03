@@ -8,3 +8,4 @@ D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Protocal\obj\Debu
 D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Protocal\obj\Debug\Protocal.pdb
 D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Scripts\Net\Protocal.dll
 D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Scripts\Net\Protocal.pdb
+D:\Program Files (x86)\VisualStudioProjects\Server_DarkGod_XAN\Protocal\obj\Debug\Protocal.csprojAssemblyReference.cache

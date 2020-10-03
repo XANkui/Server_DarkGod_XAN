@@ -20,9 +20,11 @@ public class LoginSys
     }
 
     private CacheSvc cacheSvc = null;
+    private TimerSvc timerSvc = null;
 
     public void Init() {
         cacheSvc = CacheSvc.Instance;
+        timerSvc = TimerSvc.Instance;
 
         Common.Log("LoginSys Init Done.");
     }
@@ -49,6 +51,31 @@ public class LoginSys
                 msg.err = (int)ErrorCode.WrongPassword;
             }
             else {
+
+                // 计算离线体力增长
+                int power = playerData.power;
+                long now = timerSvc.GetNowTime();
+                long milliSeconds = now - playerData.time;
+                int addPower = (int)(milliSeconds / (1000 * 60 * Common.PowerAddSpace)) * Common.PowerAddCount;
+
+                if (addPower > 0)
+                {
+                    int powerMax = Common.GetPowerLimit(playerData.lv);
+                    if (playerData.power < powerMax)
+                    {
+                        playerData.power += addPower;
+                        if (playerData.power > powerMax)
+                        {
+                            playerData.power = powerMax;
+                        }
+                    }
+                }
+
+                if (power != playerData.power)
+                {
+                    cacheSvc.UpdatePlayerData(playerData.id,playerData);
+                }
+
                 msg.rspLogin = new RspLogin
                 {
                     playerData = playerData
@@ -98,7 +125,18 @@ public class LoginSys
     }
 
     public void ClearOfflineData(ServerSession session) {
-        cacheSvc.AcctOffline(session);
+
+        PlayerData playerData = cacheSvc.GetPlayerDataBySession(session);
+        if (playerData !=null)
+        {
+            playerData.time = timerSvc.GetNowTime();
+            if (cacheSvc.UpdatePlayerData(playerData.id,playerData) == false)
+            {
+                Common.Log("Update offline time error", LogType.Error);
+            }
+            cacheSvc.AcctOffline(session);
+        }
+        
     }
 
 }

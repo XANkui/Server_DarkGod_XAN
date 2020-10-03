@@ -31,5 +31,32 @@ public class Common
     public static int GetExpUpValByLv(int lv) {
         return 100 * lv * lv;
     }
+
+    public static void CalcExp(PlayerData pd, int addExp)
+    {
+        int curLv = pd.lv;
+        int curExp = pd.exp;
+        int addRestExp = addExp;
+        while (true)
+        {
+            int upNeedExp = GetExpUpValByLv(curLv) - curExp;
+            if (addRestExp >= upNeedExp)
+            {
+                curLv += 1;
+                curExp = 0;
+                addRestExp -= upNeedExp;
+            }
+            else
+            {
+                pd.lv = curLv;
+                pd.exp = curExp + addRestExp;
+                break;
+            }
+        }
+    }
+
+    public const int PowerAddSpace = 5;     // 分钟
+    public const int PowerAddCount = 2;     // 体力增加值
+
 }
 

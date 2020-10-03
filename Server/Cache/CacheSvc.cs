@@ -94,5 +94,34 @@ public class CacheSvc
         bool succ = onlineSessionPdDic.Remove(session);
         Common.Log("Offline Result:SessionID = "+session.SessionID+" result = " +succ);
     }
+
+    public List<ServerSession> GetAllOnlineServerSessions() {
+        List<ServerSession> lst = new List<ServerSession>();
+        foreach (var item in onlineSessionPdDic)
+        {
+            lst.Add(item.Key);
+        }
+
+        return lst;
+    }
+
+    public Dictionary<ServerSession, PlayerData> GetOnlineCache() {
+        return onlineSessionPdDic;
+    }
+
+    public ServerSession GetOnlineServerSession(int ID) {
+        ServerSession session = null;
+
+        foreach (var item in onlineSessionPdDic)
+        {
+            if (item.Value.id == ID)
+            {
+                session = item.Key;
+                break;
+            }
+        }
+
+        return session;
+    }
 }
 

@@ -67,6 +67,7 @@ public class DBMgr
                         power = reader.GetInt32("power"),
                         coin = reader.GetInt32("coin"),
                         diamond = reader.GetInt32("diamond"),
+                        crystal = reader.GetInt32("crystal"),
 
                         hp = reader.GetInt32("hp"),
                         ad = reader.GetInt32("ad"),
@@ -75,10 +76,66 @@ public class DBMgr
                         apdef = reader.GetInt32("apdef"),
                         dodge = reader.GetInt32("dodge"),
                         pierce = reader.GetInt32("pierce"),
-                        critical = reader.GetInt32("critical")
+                        critical = reader.GetInt32("critical"),
+                        guideid = reader.GetInt32("guideid"),
+                        time = reader.GetInt64("time"),
+                        fuben = reader.GetInt32("fuben")
 
                         //Todo Add
                     };
+
+                    #region Strong
+
+                    
+                    // strong数据形式：1#2#3#4#5#6#
+                    string[] strongStrArr = reader.GetString("strong").Split('#');
+                    int[] _strongArr = new int[6];
+                    for (int i = 0; i < strongStrArr.Length; i++)
+                    {
+                        if (strongStrArr[i]=="")
+                        {
+                            continue;
+                        }
+                        if (int.TryParse(strongStrArr[i], out int starlv))
+                        {
+                            _strongArr[i] = starlv;
+                        }
+                        else {
+                            Common.Log("Parse Strong Data Error,Data = "+ strongStrArr[i], LogType.Error);
+                        }
+                    }
+
+                    playerData.strongArr = _strongArr;
+                    #endregion
+
+
+                    #region TaskReward
+
+
+                    // TaskReward 数据形式：1|0|0#2|0|0#3|0|0#4|0|0#5|0|0#
+                    string[] tskRwdStrArr = reader.GetString("task").Split('#');
+                    playerData.taskArr = new string[6];
+                    for (int i = 0; i < tskRwdStrArr.Length; i++)
+                    {
+                        if (tskRwdStrArr[i] == "")
+                        {
+                            continue;
+                        }
+                        else if (tskRwdStrArr[i].Length>=5)
+                        {
+                            playerData.taskArr[i] = tskRwdStrArr[i];
+                        }
+                        else
+                        {
+                            Common.Log("Parse Strong Data Error,Data = " + tskRwdStrArr[i], LogType.Error);
+
+                            throw new System.Exception("Data Error");
+                        }
+                    }
+
+                    
+                    #endregion
+                    // Todo ADD
                 }
             }
         }
@@ -100,11 +157,12 @@ public class DBMgr
                 playerData = new PlayerData {
                     id = -1,
                     name = "",
-                    lv=1,
-                    exp=0,
-                    power=150,
-                    coin=5000,
-                    diamond=500,
+                    lv = 1,
+                    exp = 0,
+                    power = 150,
+                    coin = 5000,
+                    diamond = 500,
+                    crystal = 500,
 
                     hp = 2000,
                     ad = 275,
@@ -113,10 +171,27 @@ public class DBMgr
                     apdef = 43,
                     dodge = 7,
                     pierce = 5,
-                    critical = 2
+                    critical = 2,
+
+                    guideid = 1001,
+                    strongArr = new int[6],
+                    time = TimerSvc.Instance.GetNowTime(),
+                    taskArr = new string[6],
+                    fuben = 10001
+
+                   
+                    
+
                     //Todo Add
 
                 };
+                // 数据形式：1 | 0 | 0#2|0|0#3|0|0#4|0|0#5|0|0#
+                // 初始化任务奖励数据
+                for (int i = 0; i < playerData.taskArr.Length; i++)
+                {
+                    playerData.taskArr[i] = (i + 1) + "|0|0";
+                }
+
                 // 保存数据到数据库中
                 playerData.id =  InsertNewAcctData(acct,pass,playerData);
             }
@@ -134,7 +209,8 @@ public class DBMgr
         {
             MySqlCommand cmd = new MySqlCommand(
                 "Insert into account set acct=@acct,pass=@pass,name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,"+
-                "hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical", conn
+                "crystal=@crystal,hp=@hp,ad=@ad,ap=@ap,addef=@addef,apdef=@apdef,dodge=@dodge,pierce=@pierce,critical=@critical,"+
+                "guideid=@guideid,strong=@strong,time=@time,task=@task,fuben=@fuben", conn
                 );
             cmd.Parameters.AddWithValue("acct",acct);
             cmd.Parameters.AddWithValue("pass", pass);
@@ -144,6 +220,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("power", playerData.power);
             cmd.Parameters.AddWithValue("coin", playerData.coin);
             cmd.Parameters.AddWithValue("diamond", playerData.diamond);
+            cmd.Parameters.AddWithValue("crystal", playerData.crystal);
 
             cmd.Parameters.AddWithValue("hp", playerData.hp);
             cmd.Parameters.AddWithValue("ad", playerData.ad);
@@ -153,6 +230,26 @@ public class DBMgr
             cmd.Parameters.AddWithValue("dodge", playerData.dodge);
             cmd.Parameters.AddWithValue("pierce", playerData.pierce);
             cmd.Parameters.AddWithValue("critical", playerData.critical);
+            cmd.Parameters.AddWithValue("guideid", playerData.guideid);
+
+            string strongArr = "";
+            for (int i = 0; i < playerData.strongArr.Length; i++)
+            {
+                strongArr += playerData.strongArr[i];
+                strongArr += "#";
+            }
+            cmd.Parameters.AddWithValue("strong", strongArr);
+            cmd.Parameters.AddWithValue("time", playerData.time);
+
+            // 数据形式：1 | 0 | 0#2|0|0#3|0|0#4|0|0#5|0|0#
+            string taskArr = "";
+            for (int i = 0; i < playerData.taskArr.Length; i++)
+            {
+                taskArr += playerData.taskArr[i];
+                taskArr += "#";
+            }
+            cmd.Parameters.AddWithValue("task", taskArr);
+            cmd.Parameters.AddWithValue("fuben", playerData.fuben);
 
             // Todo Add
 
@@ -207,8 +304,9 @@ public class DBMgr
         try
         {
             MySqlCommand cmd = new MySqlCommand(
-                "update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,"+
-                "hp = @hp, ad = @ad, ap = @ap, addef = @addef, apdef = @apdef, dodge = @dodge, pierce = @pierce, critical = @critical" +
+                "update account set name=@name,level=@level,exp=@exp,power=@power,coin=@coin,diamond=@diamond,crystal=@crystal," +
+                "hp = @hp, ad = @ad, ap = @ap, addef = @addef, apdef = @apdef, dodge = @dodge, pierce = @pierce, critical = @critical," +
+                "guideid=@guideid,strong=@strong,time=@time,task=@task,fuben=@fuben" +
                 " where id = @id",conn
                 );
 
@@ -219,6 +317,7 @@ public class DBMgr
             cmd.Parameters.AddWithValue("power", playerData.power);
             cmd.Parameters.AddWithValue("coin", playerData.coin);
             cmd.Parameters.AddWithValue("diamond", playerData.diamond);
+            cmd.Parameters.AddWithValue("crystal", playerData.crystal);
 
             cmd.Parameters.AddWithValue("hp", playerData.hp);
             cmd.Parameters.AddWithValue("ad", playerData.ad);
@@ -228,6 +327,27 @@ public class DBMgr
             cmd.Parameters.AddWithValue("dodge", playerData.dodge);
             cmd.Parameters.AddWithValue("pierce", playerData.pierce);
             cmd.Parameters.AddWithValue("critical", playerData.critical);
+            cmd.Parameters.AddWithValue("guideid", playerData.guideid);
+
+            string strongArr = "";
+            for (int i = 0; i < playerData.strongArr.Length; i++)
+            {
+                strongArr += playerData.strongArr[i];
+                strongArr += "#";
+            }
+            cmd.Parameters.AddWithValue("strong", strongArr);
+            cmd.Parameters.AddWithValue("time", playerData.time);
+
+            // 数据形式：1 | 0 | 0#2|0|0#3|0|0#4|0|0#5|0|0#
+            string taskArr = "";
+            for (int i = 0; i < playerData.taskArr.Length; i++)
+            {
+                taskArr += playerData.taskArr[i];
+                taskArr += "#";
+            }
+            cmd.Parameters.AddWithValue("task", taskArr);
+            cmd.Parameters.AddWithValue("fuben", playerData.fuben);
+
             // TOADD
 
             cmd.ExecuteNonQuery();

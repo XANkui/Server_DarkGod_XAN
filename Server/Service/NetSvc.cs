@@ -101,6 +101,14 @@ public class NetSvc
                 TaskSys.Instance.ReqTakeTaskReward(pack);
                 break;
 
+            case CMD.ReqFBFight:
+                FubenSys.Instance.ReqFBFight(pack);
+                break;
+
+
+            case CMD.ReqFBFightEnd:
+                FubenSys.Instance.ReqFBFightEnd(pack);
+                break;
         }
     }
 }

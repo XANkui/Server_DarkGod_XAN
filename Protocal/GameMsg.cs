@@ -30,6 +30,11 @@ namespace Protocal
         public ReqTakeTaskReward reqTakeTaskReward;
         public RspTakeTaskReward rspTakeTaskReward;
         public PshTaskPrgs pshTaskPrgs;
+
+        public ReqFBFight reqFBFight;
+        public RspFBFight rspFBFight;
+        public ReqFBFightEnd reqFBFightEnd;
+        public RspFBFightEnd rspFBFightEnd;
     }
 
     #region 登录相关
@@ -191,6 +196,46 @@ namespace Protocal
 
     #endregion
 
+    #region Fuben Fight
+    [Serializable]
+    public class ReqFBFight {
+        public int fbId;
+    }
+
+    [Serializable]
+    public class RspFBFight
+    {
+        public int fbId;
+        public int power;
+    }
+
+    [Serializable]
+    public class ReqFBFightEnd
+    {
+        public int fbId;
+        public int resthp;
+        public int costtime;
+        public bool win;
+    }
+
+    [Serializable]
+    public class RspFBFightEnd
+    {
+        public int fbId;
+        public int resthp;
+        public int costtime;
+        public bool win;
+
+        //副本奖励
+        public int coin;
+        public int lv;
+        public int exp;
+        public int crystal;
+        public int fuben;
+    }
+
+    #endregion
+
     public enum ErrorCode {
         None=0,         // 没有错误
 
@@ -207,6 +252,7 @@ namespace Protocal
         LackCoin,   // 金币不够
         LackCrystal,    // 水晶不够
         LackDiamond,    // 钻石不够
+        LackPower,    // 体力不够
     }
 
     public enum CMD {
@@ -239,6 +285,13 @@ namespace Protocal
         ReqTakeTaskReward = 210,
         RspTakeTaskReward = 210,
         PshTaskPrgs = 211,
+
+        // 副本战斗
+        ReqFBFight =301,
+        RspFBFight =302,
+        ReqFBFightEnd = 303,
+        RspFBFightEnd = 304,
+
     }
 
     public class SrvCfg {

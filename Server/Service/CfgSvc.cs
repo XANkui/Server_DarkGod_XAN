@@ -23,6 +23,7 @@ public class CfgSvc
         InitGuideCfg(@"D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Resources\ResCfgs\guide.xml");
         InitStrongCfg(@"D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Resources\ResCfgs\strong.xml");
         InitTaskRewardCfg(@"D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Resources\ResCfgs\taskreward.xml");
+        InitMapCfg(@"D:\ProgramFile\UnityProjects\DarkGod_XAN\Assets\Resources\ResCfgs\map.xml");
 
         Common.Log("CfgSvc Init Done.");
     }
@@ -243,6 +244,80 @@ public class CfgSvc
     }
 
     #endregion
+
+    #region 任务奖励配置
+    private Dictionary<int, MapCfg> mapDic = new Dictionary<int, MapCfg>();
+    private void InitMapCfg(string path)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(path);
+
+        XmlNodeList nodLst = doc.SelectSingleNode("root").ChildNodes;
+
+        for (int i = 0; i < nodLst.Count; i++)
+        {
+            XmlElement ele = nodLst[i] as XmlElement;
+
+            if (ele.GetAttributeNode("ID") == null)
+            {
+                continue;
+            }
+
+            int ID = Convert.ToInt32(ele.GetAttributeNode("ID").InnerText);
+
+            MapCfg mc = new MapCfg
+            {
+                ID = ID
+            };
+
+            foreach (XmlElement e in nodLst[i].ChildNodes)
+            {
+                switch (e.Name)
+                {
+                    case "power":
+                        mc.power = int.Parse(e.InnerText);
+                        break;
+
+                    case "coin":
+                        mc.coin = int.Parse(e.InnerText);
+                        break;
+                    case "exp":
+                        mc.exp = int.Parse(e.InnerText);
+                        break;
+                    case "crystal":
+                        mc.crystal = int.Parse(e.InnerText);
+                        break;
+
+                }
+            }
+
+            mapDic.Add(ID, mc);
+        }
+
+        Common.Log("MapCfg Cfg Init Done.");
+    }
+
+    public MapCfg GetMapCfg(int id)
+    {
+        MapCfg mc = null;
+        mapDic.TryGetValue(id, out mc);
+
+        return mc;
+    }
+
+    #endregion
+}
+
+
+
+public class MapCfg : BaseData<GuideCfg>
+{
+
+    public int power;
+    public int coin;
+    public int exp;
+    public int crystal;
+    
 }
 
 public class StrongCfg : BaseData<StrongCfg>

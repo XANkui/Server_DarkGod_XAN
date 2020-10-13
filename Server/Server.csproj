@@ -45,6 +45,7 @@
     <Compile Include="Service\TimerSvc.cs" />
     <Compile Include="System\BuySys.cs" />
     <Compile Include="System\ChatSys.cs" />
+    <Compile Include="System\FubenSys.cs" />
     <Compile Include="System\GuideSys.cs" />
     <Compile Include="System\LoginSys.cs" />
     <Compile Include="System\PowerSys.cs" />
